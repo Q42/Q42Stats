@@ -35,8 +35,8 @@ Add this repo as a dependency through Xcode: `https://github.com/Q42/Q42Stats.gi
 ```swift
 extension Q42Stats.Configuration {
   static let myApp = Q42Stats.Configuration(
-    firebaseProject: "foobar",
-    firebaseDatabase: "somedatabase",
+    firebaseProject: "theproject",
+    firebaseCollection: "somecollection",
     minimumSubmitInterval: 60*60*24*7.5,
     sharedSecret: "random-string-used-for-creating-a-checksum"
   )
