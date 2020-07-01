@@ -47,7 +47,7 @@ public class Q42Stats: NSObject {
   }
 
   private static var shared: Q42Stats?
-  private static let statsVersion = "iOS 2020-06-03"
+  private static let statsVersion = "iOS 2020-07-01"
 
   private static let instanceIdKey = "nl.q42.stats.instanceID"
   private static let timestampOfPreviousSubmitKey = "nl.q42.stats.timestampOfPreviousSubmitKey"
@@ -115,6 +115,9 @@ public class Q42Stats: NSObject {
     collected[key] = value
   }
 
+  /// Start collection of statistics.
+  ///
+  /// - Note: Must be called from the main queue
   public func collect(window: UIWindow?, completion: @escaping ([String: String]) -> Void) {
     collected = [:]
 
@@ -245,7 +248,7 @@ public class Q42Stats: NSObject {
     }
 
     // Wait 5 seconds (for Apple Watch to pair)
-    DispatchQueue.global(qos: .background).asyncAfter(deadline: .now() + 5) {
+    DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
       completion(self.collected)
     }
   }
@@ -264,7 +267,9 @@ public class Q42Stats: NSObject {
 extension Q42Stats: WCSessionDelegate {
   @available(iOS 9.3, *)
   public func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {
-    _log(key: "Watch paired", value: session.isPaired.description)
+    DispatchQueue.main.async {
+      self._log(key: "Watch paired", value: session.isPaired.description)
+    }
   }
 
   public func sessionDidBecomeInactive(_ session: WCSession) {}
