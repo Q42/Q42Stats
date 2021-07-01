@@ -296,6 +296,7 @@ private extension UIUserInterfaceIdiom {
     case .carPlay: return "carPlay"
     case .tv: return "tv"
     case .unspecified: return "unspecified"
+    case .mac: return "mac"
     @unknown default: return "unknown"
     }
   }
