@@ -444,6 +444,7 @@ private extension UIDevice {
   }
 
   var modelName: String {
+    /// Reference: https://www.theiphonewiki.com/wiki/Models
     let names = [
       "i386": "Simulator",
       "x86_64": "Simulator",
@@ -483,21 +484,24 @@ private extension UIDevice {
       "iPad5,2": "iPad mini 4",
       "iPad5,3": "iPad Air 2",
       "iPad5,4": "iPad Air 2",
+      "iPad6,11": "iPad 5",
+      "iPad6,12": "iPad 5",
       "iPad6,3": "iPad Pro (9.7\")",
       "iPad6,4": "iPad Pro (9.7\")",
       "iPad6,7": "iPad Pro (12.9\")",
       "iPad6,8": "iPad Pro (12.9\")",
-      "iPad6,11": "iPad 5",
-      "iPad6,12": "iPad 5",
       "iPad7,1": "iPad Pro (12.9\") (2nd generation)",
+      "iPad7,11": "iPad 7",
+      "iPad7,12": "iPad 7",
       "iPad7,2": "iPad Pro (12.9\") (2nd generation)",
       "iPad7,3": "iPad Pro (10.5\")",
       "iPad7,4": "iPad Pro (10.5\")",
       "iPad7,5": "iPad 6",
       "iPad7,6": "iPad 6",
-      "iPad7,11": "iPad 7",
-      "iPad7,12": "iPad 7",
       "iPad8,1": "iPad Pro (11\")",
+      "iPad8,10": "iPad Pro (11\") (2nd generation)",
+      "iPad8,11": "iPad Pro (12.9\") (4th generation)",
+      "iPad8,12": "iPad Pro (12.9\") (4th generation)",
       "iPad8,2": "iPad Pro (11\")",
       "iPad8,3": "iPad Pro (11\")",
       "iPad8,4": "iPad Pro (11\")",
@@ -506,13 +510,26 @@ private extension UIDevice {
       "iPad8,7": "iPad Pro (12.9\") (3rd generation)",
       "iPad8,8": "iPad Pro (12.9\") (3rd generation)",
       "iPad8,9": "iPad Pro (11\") (2nd generation)",
-      "iPad8,10": "iPad Pro (11\") (2nd generation)",
-      "iPad8,11": "iPad Pro (12.9\") (4th generation)",
-      "iPad8,12": "iPad Pro (12.9\") (4th generation)",
       "iPad11,1": "iPad mini 5",
       "iPad11,2": "iPad mini 5",
       "iPad11,3": "iPad Air 3",
       "iPad11,4": "iPad Air 3",
+      "iPad11,6": "iPad (8th generation)",
+      "iPad11,7": "iPad (8th generation)",
+      "iPad12,1": "iPad (9th generation)",
+      "iPad12,2": "iPad (9th generation)",
+      "iPad13,1": "iPad Air (4th generation)",
+      "iPad13,10": "iPad Pro (12.9-inch) (5th generation)",
+      "iPad13,11": "iPad Pro (12.9-inch) (5th generation)",
+      "iPad13,2": "iPad Air (4th generation)",
+      "iPad13,4": "iPad Pro (11-inch) (3rd generation)",
+      "iPad13,5": "iPad Pro (11-inch) (3rd generation)",
+      "iPad13,6": "iPad Pro (11-inch) (3rd generation)",
+      "iPad13,7": "iPad Pro (11-inch) (3rd generation)",
+      "iPad13,8": "iPad Pro (12.9-inch) (5th generation)",
+      "iPad13,9": "iPad Pro (12.9-inch) (5th generation)",
+      "iPad14,1": "iPad mini (6th generation)",
+      "iPad14,2": "iPad mini (6th generation)",
 
       "iPhone1,1": "iPhone",
       "iPhone1,2": "iPhone 3G",
@@ -533,14 +550,14 @@ private extension UIDevice {
       "iPhone8,2": "iPhone 6S Plus",    //
       "iPhone8,4": "iPhone SE",         //
       "iPhone9,1": "iPhone 7",          //
-      "iPhone9,3": "iPhone 7",          //
       "iPhone9,2": "iPhone 7 Plus",     //
+      "iPhone9,3": "iPhone 7",          //
       "iPhone9,4": "iPhone 7 Plus",     //
       "iPhone10,1": "iPhone 8",          // CDMA
-      "iPhone10,4": "iPhone 8",          // GSM
       "iPhone10,2": "iPhone 8 Plus",     // CDMA
-      "iPhone10,5": "iPhone 8 Plus",     // GSM
       "iPhone10,3": "iPhone X",          // CDMA
+      "iPhone10,4": "iPhone 8",          // GSM
+      "iPhone10,5": "iPhone 8 Plus",     // GSM
       "iPhone10,6": "iPhone X",          // GSM
       "iPhone11,2": "iPhone XS",         //
       "iPhone11,4": "iPhone XS Max",     //
@@ -550,6 +567,14 @@ private extension UIDevice {
       "iPhone12,3": "iPhone 11 Pro",     //
       "iPhone12,5": "iPhone 11 Pro Max", //
       "iPhone12,8": "iPhone SE (2nd generation)", //
+      "iPhone13,1": "iPhone 12 mini",    //
+      "iPhone13,2": "iPhone 12",         //
+      "iPhone13,3": "iPhone 12 Pro",     //
+      "iPhone13,4": "iPhone 12 Pro Max", //
+      "iPhone14,2": "iPhone 13 Pro",     //
+      "iPhone14,3": "iPhone 13 Pro Max", //
+      "iPhone14,4": "iPhone 13 mini",    //
+      "iPhone14,5": "iPhone 13",         //
     ]
 
     let id = modelIdentifier
