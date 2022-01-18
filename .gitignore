@@ -71,3 +71,6 @@ node_modules
 build-profiling-results
 **/Settings.bundle/Acknowledgements.plist
 .idea/
+
+# Swift Package Manager
+.swiftpm
