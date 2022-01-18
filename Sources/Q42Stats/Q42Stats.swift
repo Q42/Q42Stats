@@ -431,7 +431,7 @@ private extension UIAccessibility {
   }
 }
 
-private extension UIDevice {
+extension UIDevice {
   var modelIdentifier: String {
     var systemInfo = utsname()
     uname(&systemInfo)
@@ -443,7 +443,9 @@ private extension UIDevice {
     return identifier
   }
 
-  var modelName: String {
+  /// Returns the human-readable model name of the device.
+  /// Falls back to the model identifier when no matching model name is known.
+  public var modelName: String {
     /// Reference: https://www.theiphonewiki.com/wiki/Models
     let names = [
       "i386": "Simulator",
