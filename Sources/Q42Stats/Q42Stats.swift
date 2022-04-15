@@ -47,6 +47,7 @@ public class Q42Stats: NSObject {
   private static var shared: Q42Stats?
   private static let statsVersion = "iOS 2022-04-15"
 
+  private static let collectedStatsKey = "nl.q42.stats.collectedStatsKey"
   private static let timestampOfPreviousSubmitKey = "nl.q42.stats.timestampOfPreviousSubmitKey"
 
   public let options: StatsOptions
@@ -83,12 +84,15 @@ public class Q42Stats: NSObject {
       }
       UserDefaults.standard.set(timestamp, forKey: timestampOfPreviousSubmitKey)
 
+      // Retrieve previous collected stats
+      let previousStats = UserDefaults.standard.object(forKey: collectedStatsKey) as? [String: String]
+
       // Create payload
       let payload: Data
       do {
-        payload = try JSONEncoder().encode(StatsPayload(stats: stats))
+        payload = try JSONEncoder().encode(StatsPayload(current: stats, previous: previousStats))
       } catch {
-        assertionFailure("🙂 Q42Stats: Could not create payload");
+        assertionFailure("Q42Stats: Could not create payload");
         return
       }
 
@@ -101,15 +105,12 @@ public class Q42Stats: NSObject {
 
       let task = URLSession.shared.dataTask(with: request) { data, response, error in
         guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode >= 200 && httpResponse.statusCode < 300, error == nil else {
-          print("🙂 Q42Stats: Failed to reach backend to submit stats. Status code: \((response as? HTTPURLResponse)?.statusCode ?? -1) Error: \(error?.localizedDescription ?? "None")")
+          print("Q42Stats: Failed to reach backend to submit stats. Status code: \((response as? HTTPURLResponse)?.statusCode ?? -1) Error: \(error?.localizedDescription ?? "None")")
           return
         }
 
-        if let data = data, let dataString = String(data: data, encoding: .utf8) {
-          print("🙂 Q42Stats: Yay! Status code: \((response as? HTTPURLResponse)?.statusCode ?? -1) Data: \(dataString))")
-        } else {
-          print("🙂 Q42Stats: Sad! Status code: \((response as? HTTPURLResponse)?.statusCode ?? -1)")
-        }
+        // Save collected stats for next submit
+        UserDefaults.standard.set(stats, forKey: collectedStatsKey)
       }
       task.resume()
     }
@@ -621,8 +622,8 @@ private struct StatsPayload: Encodable {
   let currentMeasurement: [String: String]
   let previousMeasurement: [String: String]?
 
-  init(stats: [String: String]) {
-    self.currentMeasurement = stats
-    self.previousMeasurement = nil
+  init(current: [String: String], previous: [String: String]?) {
+    self.currentMeasurement = current
+    self.previousMeasurement = previous
   }
 }
