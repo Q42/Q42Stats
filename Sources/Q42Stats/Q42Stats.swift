@@ -81,7 +81,7 @@ public class Q42Stats: NSObject {
       // Check and update timestamp to rate limit submits
       let timestamp = Date().timeIntervalSince1970
       guard timestamp - UserDefaults.standard.double(forKey: timestampOfPreviousSubmitKey) > configuration.minimumSubmitInterval else {
-        // print("Q42Stats: Already submitted stats in the last \(configuration.minimumSubmitInterval) seconds, not collecting stats!")
+        print("Q42Stats: Already submitted stats in the last \(configuration.minimumSubmitInterval) seconds, not collecting stats!")
         return
       }
       UserDefaults.standard.set(timestamp, forKey: timestampOfPreviousSubmitKey)
@@ -91,7 +91,7 @@ public class Q42Stats: NSObject {
       do {
         payload = try JSONEncoder().encode(StatsPayload(stats: stats, hashFunc: hashFunc, secret: configuration.sharedSecret))
       } catch {
-        assertionFailure("Q42Stats: Could not create payload");
+        assertionFailure("🙂 Q42Stats: Could not create payload");
         return
       }
 
@@ -103,8 +103,14 @@ public class Q42Stats: NSObject {
 
       let task = URLSession.shared.dataTask(with: request) { data, response, error in
         guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode >= 200 && httpResponse.statusCode < 300, error == nil else {
-          // print("Q42Stats: Failed to reach backend to submit stats. Status code: \((response as? HTTPURLResponse)?.statusCode ?? -1) Error: \(error?.localizedDescription ?? "None")")
+          print("🙂 Q42Stats: Failed to reach backend to submit stats. Status code: \((response as? HTTPURLResponse)?.statusCode ?? -1) Error: \(error?.localizedDescription ?? "None")")
           return
+        }
+
+        if let data = data, let dataString = String(data: data, encoding: .utf8) {
+          print("🙂 Q42Stats: Yay! Status code: \((response as? HTTPURLResponse)?.statusCode ?? -1) Data: \(dataString))")
+        } else {
+          print("🙂 Q42Stats: Sad! Status code: \((response as? HTTPURLResponse)?.statusCode ?? -1)")
         }
       }
       task.resume()
