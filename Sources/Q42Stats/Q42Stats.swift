@@ -76,13 +76,12 @@ public class Q42Stats: NSObject {
 
       seedPreviousSubmitMomentIfNeeded(minimumSubmitInterval: configuration.minimumSubmitInterval)
 
-      // Check and update timestamp to rate limit submits
+      // Check timestamp to rate limit submits
       let timestamp = Date().timeIntervalSince1970
       guard timestamp - UserDefaults.standard.double(forKey: timestampOfPreviousSubmitKey) > configuration.minimumSubmitInterval else {
         print("Q42Stats: Already submitted stats in the last \(configuration.minimumSubmitInterval) seconds, not collecting stats!")
         return
       }
-      UserDefaults.standard.set(timestamp, forKey: timestampOfPreviousSubmitKey)
 
       // Retrieve previous collected stats
       let previousStats = UserDefaults.standard.object(forKey: collectedStatsKey) as? [String: String]
@@ -109,8 +108,9 @@ public class Q42Stats: NSObject {
           return
         }
 
-        // Save collected stats for next submit
+        // On succes we update the local data
         UserDefaults.standard.set(stats, forKey: collectedStatsKey)
+        UserDefaults.standard.set(timestamp, forKey: timestampOfPreviousSubmitKey)
       }
       task.resume()
     }
