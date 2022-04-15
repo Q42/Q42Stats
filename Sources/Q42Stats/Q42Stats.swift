@@ -262,7 +262,7 @@ extension Q42Stats: WCSessionDelegate {
   @available(iOS 9.3, *)
   public func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {
     DispatchQueue.main.async {
-      self._log(key: "Watch paired", value: session.isPaired.description)
+      self._log(key: "Watch_paired", value: session.isPaired.description)
     }
   }
 
