@@ -49,7 +49,6 @@ public class Q42Stats: NSObject {
   private static var shared: Q42Stats?
   private static let statsVersion = "iOS 2020-07-01"
 
-  private static let instanceIdKey = "nl.q42.stats.instanceID"
   private static let timestampOfPreviousSubmitKey = "nl.q42.stats.timestampOfPreviousSubmitKey"
 
   public let options: StatsOptions
@@ -128,7 +127,6 @@ public class Q42Stats: NSObject {
     collected = [:]
 
     _log(key: "Stats version", value: Q42Stats.statsVersion)
-    _log(key: "Stats instance ID", value: "\(getInstanceId())")
     _log(key: "Stats timestamp", value: "\(Date().timeIntervalSince1970)")
 
     if let bundleIdentifier = Bundle.main.bundleIdentifier {
@@ -257,16 +255,6 @@ public class Q42Stats: NSObject {
     DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
       completion(self.collected)
     }
-  }
-
-  private func getInstanceId() -> String {
-    if let instanceId = UserDefaults.standard.string(forKey: Q42Stats.instanceIdKey) {
-      return instanceId
-    }
-
-    let instanceId = UUID().uuidString
-    UserDefaults.standard.set(instanceId, forKey: Q42Stats.instanceIdKey)
-    return instanceId
   }
 }
 
