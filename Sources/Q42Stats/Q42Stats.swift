@@ -14,18 +14,16 @@ import WatchConnectivity
 ///
 public class Q42Stats: NSObject {
   public struct Configuration {
-    let firebaseProject: String
-    let firebaseCollection: String
+    let apiKey: String
+    let firestoreCollection: String
     let minimumSubmitInterval: TimeInterval
-    let sharedSecret: String
 
-    var firebaseURL: URL? { URL(string: "https://firestore.googleapis.com/v1/projects/" + firebaseProject + "/databases/(default)/documents/" + firebaseCollection + "?mask.fieldPaths=_") }
+    var endpoint: URL? { URL(string: "https://q42stats.ew.r.appspot.com/add/\(firestoreCollection)") }
 
-    public init(firebaseProject: String, firebaseCollection: String, minimumSubmitInterval: TimeInterval, sharedSecret: String) {
-      self.firebaseProject = firebaseProject
-      self.firebaseCollection = firebaseCollection
+    public init(apiKey: String, firestoreCollection: String, minimumSubmitInterval: TimeInterval) {
+      self.apiKey = apiKey
+      self.firestoreCollection = firestoreCollection
       self.minimumSubmitInterval = minimumSubmitInterval
-      self.sharedSecret = sharedSecret
     }
   }
 
@@ -47,7 +45,7 @@ public class Q42Stats: NSObject {
   }
 
   private static var shared: Q42Stats?
-  private static let statsVersion = "iOS 2020-07-01"
+  private static let statsVersion = "iOS 2022-04-15"
 
   private static let timestampOfPreviousSubmitKey = "nl.q42.stats.timestampOfPreviousSubmitKey"
 
@@ -71,9 +69,9 @@ public class Q42Stats: NSObject {
     UserDefaults.standard.set(simulatedTimestampOfPreviousSubmit, forKey: Q42Stats.timestampOfPreviousSubmitKey)
   }
 
-  public static func submit(configuration: Configuration, sha256 hashFunc: @escaping (String) -> String) -> ([String: String]) -> Void {
+  public static func submit(configuration: Configuration) -> ([String: String]) -> Void {
     return { stats in
-      guard let firebaseURL = configuration.firebaseURL else { assertionFailure("Q42Stats: Invalid endpoint"); return }
+      guard let endpoint = configuration.endpoint else { assertionFailure("Q42Stats: Invalid endpoint"); return }
 
       seedPreviousSubmitMomentIfNeeded(minimumSubmitInterval: configuration.minimumSubmitInterval)
 
@@ -85,19 +83,20 @@ public class Q42Stats: NSObject {
       }
       UserDefaults.standard.set(timestamp, forKey: timestampOfPreviousSubmitKey)
 
-      // Create Firestore compatible payload
+      // Create payload
       let payload: Data
       do {
-        payload = try JSONEncoder().encode(StatsPayload(stats: stats, hashFunc: hashFunc, secret: configuration.sharedSecret))
+        payload = try JSONEncoder().encode(StatsPayload(stats: stats))
       } catch {
         assertionFailure("🙂 Q42Stats: Could not create payload");
         return
       }
 
       // Build request and submit
-      var request = URLRequest(url: firebaseURL, cachePolicy: .useProtocolCachePolicy, timeoutInterval: 30)
+      var request = URLRequest(url: endpoint, cachePolicy: .useProtocolCachePolicy, timeoutInterval: 30)
       request.httpMethod = "POST"
       request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+      request.setValue(configuration.apiKey, forHTTPHeaderField: "X-Api-Key")
       request.httpBody = payload
 
       let task = URLSession.shared.dataTask(with: request) { data, response, error in
@@ -126,42 +125,42 @@ public class Q42Stats: NSObject {
   public func collect(window: UIWindow?, completion: @escaping ([String: String]) -> Void) {
     collected = [:]
 
-    _log(key: "Stats version", value: Q42Stats.statsVersion)
-    _log(key: "Stats timestamp", value: "\(Date().timeIntervalSince1970)")
+    _log(key: "Stats_version", value: Q42Stats.statsVersion)
+    _log(key: "Stats_timestamp", value: "\(Date().timeIntervalSince1970)")
 
     if let bundleIdentifier = Bundle.main.bundleIdentifier {
-      _log(key: "App bundle identifier", value: bundleIdentifier)
+      _log(key: "App_bundle_identifier", value: bundleIdentifier)
     }
 
     if options.contains(.accessibility) {
       let any = UIAccessibility.usesAnyAccessibilitySetting()
-      _log(key: "Accessibility uses any accessibility setting", value: any.description)
+      _log(key: "Accessibility_uses_any_accessibility_setting", value: any.description)
 
       if #available(iOS 10.0, *) {
         // As the docs describe in the discussion `isAssistiveTouchRunning` will only be the correct value if `isGuidedAccessEnabled` is `true`
         // See: https://developer.apple.com/documentation/uikit/uiaccessibility/1648479-isassistivetouchrunning
-        _log(key: "Accessibility isAssistiveTouchRunning with isGuidedAccessEnabled", value: UIAccessibility.isGuidedAccessEnabled ? UIAccessibility.isAssistiveTouchRunning.description : "Unknown")
+        _log(key: "Accessibility_isAssistiveTouchRunning_with_isGuidedAccessEnabled", value: UIAccessibility.isGuidedAccessEnabled ? UIAccessibility.isAssistiveTouchRunning.description : "Unknown")
       }
-      _log(key: "Accessibility isBoldTextEnabled", value: UIAccessibility.isBoldTextEnabled.description)
-      _log(key: "Accessibility isClosedCaptioningEnabled", value: UIAccessibility.isClosedCaptioningEnabled.description)
-      _log(key: "Accessibility isDarkerSystemColorsEnabled", value: UIAccessibility.isDarkerSystemColorsEnabled.description)
-      _log(key: "Accessibility isGrayscaleEnabled", value: UIAccessibility.isGrayscaleEnabled.description)
-      _log(key: "Accessibility isGuidedAccessEnabled", value: UIAccessibility.isGuidedAccessEnabled.description)
-      _log(key: "Accessibility isInvertColorsEnabled", value: UIAccessibility.isInvertColorsEnabled.description)
-      _log(key: "Accessibility isMonoAudioEnabled", value: UIAccessibility.isMonoAudioEnabled.description)
-      _log(key: "Accessibility isReduceTransparencyEnabled", value: UIAccessibility.isReduceTransparencyEnabled.description)
-      _log(key: "Accessibility isShakeToUndoEnabled", value: UIAccessibility.isShakeToUndoEnabled.description)
-      _log(key: "Accessibility isSpeakScreenEnabled", value: UIAccessibility.isSpeakScreenEnabled.description)
-      _log(key: "Accessibility isSpeakSelectionEnabled", value: UIAccessibility.isSpeakSelectionEnabled.description)
-      _log(key: "Accessibility isSwitchControlRunning", value: UIAccessibility.isSwitchControlRunning.description)
-      _log(key: "Accessibility isVoiceOverRunning", value: UIAccessibility.isVoiceOverRunning.description)
+      _log(key: "Accessibility_isBoldTextEnabled", value: UIAccessibility.isBoldTextEnabled.description)
+      _log(key: "Accessibility_isClosedCaptioningEnabled", value: UIAccessibility.isClosedCaptioningEnabled.description)
+      _log(key: "Accessibility_isDarkerSystemColorsEnabled", value: UIAccessibility.isDarkerSystemColorsEnabled.description)
+      _log(key: "Accessibility_isGrayscaleEnabled", value: UIAccessibility.isGrayscaleEnabled.description)
+      _log(key: "Accessibility_isGuidedAccessEnabled", value: UIAccessibility.isGuidedAccessEnabled.description)
+      _log(key: "Accessibility_isInvertColorsEnabled", value: UIAccessibility.isInvertColorsEnabled.description)
+      _log(key: "Accessibility_isMonoAudioEnabled", value: UIAccessibility.isMonoAudioEnabled.description)
+      _log(key: "Accessibility_isReduceTransparencyEnabled", value: UIAccessibility.isReduceTransparencyEnabled.description)
+      _log(key: "Accessibility_isShakeToUndoEnabled", value: UIAccessibility.isShakeToUndoEnabled.description)
+      _log(key: "Accessibility_isSpeakScreenEnabled", value: UIAccessibility.isSpeakScreenEnabled.description)
+      _log(key: "Accessibility_isSpeakSelectionEnabled", value: UIAccessibility.isSpeakSelectionEnabled.description)
+      _log(key: "Accessibility_isSwitchControlRunning", value: UIAccessibility.isSwitchControlRunning.description)
+      _log(key: "Accessibility_isVoiceOverRunning", value: UIAccessibility.isVoiceOverRunning.description)
     }
 
     if options.contains(.applePay) {
       if #available(iOS 10.0, *) {
         let canMakePayments = PKPaymentAuthorizationViewController
           .canMakePayments(usingNetworks: PKPaymentRequest.availableNetworks())
-        _log(key: "Apple Pay available", value: canMakePayments.description)
+        _log(key: "Apple_Pay_available", value: canMakePayments.description)
       } else {
         _log(key: "Apple Pay available", value: false.description)
       }
@@ -169,34 +168,34 @@ public class Q42Stats: NSObject {
       if #available(iOS 12.0, *) {
         let canMakeMaestroPayments = PKPaymentAuthorizationViewController
           .canMakePayments(usingNetworks: [PKPaymentNetwork.maestro])
-        _log(key: "Apple Pay w/Maestro available", value: canMakeMaestroPayments.description)
+        _log(key: "Apple_Pay_with_Maestro_available", value: canMakeMaestroPayments.description)
       } else {
-        _log(key: "Apple Pay w/Maestro available", value: false.description)
+        _log(key: "Apple_Pay_with_Maestro_available", value: false.description)
       }
     }
 
     if options.contains(.preferences) {
       if #available(iOS 13.0, *) {
         let style = UITraitCollection.current.userInterfaceStyle
-        _log(key: "Preference UI style", value: style.description)
-        _log(key: "Preference daytime", value: dayNight())
+        _log(key: "Preference_UI_style", value: style.description)
+        _log(key: "Preference_daytime", value: dayNight())
 
         let category = UITraitCollection.current.preferredContentSizeCategory
-        _log(key: "Preference preferred content size", value: category.description)
+        _log(key: "Preference_preferred_content_size", value: category.description)
       }
     }
 
     if options.contains(.screen) {
       let idiom = UIDevice.current.userInterfaceIdiom
-      _log(key: "Screen device idiom", value: idiom.description)
+      _log(key: "Screen_device_idiom", value: idiom.description)
 
       if #available(iOS 13.0, *) {
         let gamut = UITraitCollection.current.displayGamut
-        _log(key: "Screen display gamut", value: gamut.description)
+        _log(key: "Screen_display_gamut", value: gamut.description)
       }
 
       let scale = ceil(UIScreen.main.scale)
-      _log(key: "Screen scale", value: "@\(Int(scale))x")
+      _log(key: "Screen_scale", value: "@\(Int(scale))x")
 
       let isZoomed: Bool
       if UIScreen.main.nativeBounds.width == 1080 { // iPhone 6 Plus
@@ -204,50 +203,50 @@ public class Q42Stats: NSObject {
       } else {
         isZoomed = UIScreen.main.nativeScale > UIScreen.main.scale
       }
-      _log(key: "Screen zoomed", value: isZoomed.description)
+      _log(key: "Screen_zoomed", value: isZoomed.description)
 
       if #available(iOS 13.0, *) {
         let display = UIScreen.main.bounds.size
           .rotate(window?.windowScene?.interfaceOrientation)
-        _log(key: "Screen width", value: Int(display.width).description)
+        _log(key: "Screen_width", value: Int(display.width).description)
 
         let orientation = window?.windowScene?.interfaceOrientation
-        _log(key: "Screen orientation", value: orientation?.portaitLandscape ?? "unknown")
+        _log(key: "Screen_orientation", value: orientation?.portaitLandscape ?? "unknown")
       }
 
       if let window = window {
         let full = window.bounds.width == UIScreen.main.bounds.width
           || window.bounds.width == UIScreen.main.bounds.height
-        _log(key: "Screen in split-screen", value: (!full).description)
+        _log(key: "Screen_in_split_screen", value: (!full).description)
 
         let windowWidth = Int(window.bounds.width).description
-        _log(key: "Screen window width", value: windowWidth)
+        _log(key: "Screen_window_width", value: windowWidth)
       }
     }
 
     if options.contains(.system) {
-      _log(key: "System model id", value: UIDevice.current.modelIdentifier)
-      _log(key: "System model name", value: UIDevice.current.modelName)
+      _log(key: "System_model_id", value: UIDevice.current.modelIdentifier)
+      _log(key: "System_model_name", value: UIDevice.current.modelName)
 
       let dutchRegion = Locale.preferredLanguages.contains { $0.hasSuffix("-NL") }
         || Locale.current.regionCode == "NL"
-      _log(key: "System Dutch region", value: dutchRegion.description)
+      _log(key: "System_Dutch_region", value: dutchRegion.description)
 
       let preferredLanguage = Locale.preferredLanguages.first ?? ""
-      _log(key: "System Preferred language", value: preferredLanguage)
+      _log(key: "System_Preferred_language", value: preferredLanguage)
 
-      _log(key: "System OS major version", value: ProcessInfo().operatingSystemVersion.majorVersion.description)
+      _log(key: "System_OS_major_version", value: ProcessInfo().operatingSystemVersion.majorVersion.description)
     }
 
     if options.contains(.watch) {
       let watchSupported = WCSession.isSupported()
-      _log(key: "Watch supported", value: watchSupported.description)
+      _log(key: "Watch_supported", value: watchSupported.description)
 
       if watchSupported {
         WCSession.default.delegate = self
         WCSession.default.activate()
       } else {
-        _log(key: "Watch paired", value: false.description)
+        _log(key: "Watch_paired", value: false.description)
       }
     }
 
@@ -619,18 +618,11 @@ private func dayNight() -> String {
 }
 
 private struct StatsPayload: Encodable {
-  let fields: [String: StatsPayloadValue]
+  let currentMeasurement: [String: String]
+  let previousMeasurement: [String: String]?
 
-  init(stats: [String: String], hashFunc: (String) -> String, secret: String) {
-    let orderedValues = stats.keys.sorted().map { stats[$0] ?? "" }.joined(separator: "-")
-    let checksum = hashFunc(orderedValues + "-" + secret)
-
-    var fields = stats.mapValues(StatsPayloadValue.init)
-    fields["Checksum"] = StatsPayloadValue(stringValue: checksum)
-    self.fields = fields
-  }
-
-  struct StatsPayloadValue: Encodable {
-    let stringValue: String
+  init(stats: [String: String]) {
+    self.currentMeasurement = stats
+    self.previousMeasurement = nil
   }
 }

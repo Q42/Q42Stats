@@ -20,7 +20,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     window?.makeKeyAndVisible()
 
     Q42Stats(options: .all)
-      .collect(window: window, completion: Q42Stats.submit(configuration: .demoApp, sha256: sha256))
+      .collect(window: window, completion: Q42Stats.submit(configuration: .demoApp))
 
     return true
   }
@@ -28,10 +28,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 extension Q42Stats.Configuration {
   static let demoApp = Q42Stats.Configuration(
-    firebaseProject: "foobar",
-    firebaseCollection: "somecollection",
-    minimumSubmitInterval: 60*60*24*7.5,
-    sharedSecret: "random-string-used-for-creating-a-checksum"
+    apiKey: "secret",
+    firestoreCollection: "somecollection",
+    minimumSubmitInterval: 60*60*24*7.5
   )
 }
 
