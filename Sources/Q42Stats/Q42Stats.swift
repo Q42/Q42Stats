@@ -79,7 +79,7 @@ public class Q42Stats: NSObject {
       // Check timestamp to rate limit submits
       let timestamp = Date().timeIntervalSince1970
       guard timestamp - UserDefaults.standard.double(forKey: timestampOfPreviousSubmitKey) > configuration.minimumSubmitInterval else {
-        print("Q42Stats: Already submitted stats in the last \(configuration.minimumSubmitInterval) seconds, not collecting stats!")
+        // print("Q42Stats: Already submitted stats in the last \(configuration.minimumSubmitInterval) seconds, not collecting stats!")
         return
       }
 
@@ -104,7 +104,7 @@ public class Q42Stats: NSObject {
 
       let task = URLSession.shared.dataTask(with: request) { data, response, error in
         guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode >= 200 && httpResponse.statusCode < 300, error == nil else {
-          print("Q42Stats: Failed to reach backend to submit stats. Status code: \((response as? HTTPURLResponse)?.statusCode ?? -1) Error: \(error?.localizedDescription ?? "None")")
+          // print("Q42Stats: Failed to reach backend to submit stats. Status code: \((response as? HTTPURLResponse)?.statusCode ?? -1) Error: \(error?.localizedDescription ?? "None")")
           return
         }
 
