@@ -11,7 +11,7 @@ Collect stats for Q42 internal usage, shared accross multiple iOS projects.
 
 ```swift
 Q42Stats(options: .all)
-  .collect(window: window, completion: Q42Stats.submit(configuration: .myApp, sha256: sha256))
+  .collect(window: window, completion: Q42Stats.submit(configuration: .myApp))
 ```
 
 Note: Make sure you have the correct consent from the user before you call `.collect()`.
@@ -35,25 +35,9 @@ Add this repo as a dependency through Xcode: `https://github.com/Q42/Q42Stats.gi
 ```swift
 extension Q42Stats.Configuration {
   static let myApp = Q42Stats.Configuration(
-    firebaseProject: "theproject",
-    firebaseCollection: "somecollection",
-    minimumSubmitInterval: 60*60*24*7.5,
-    sharedSecret: "random-string-used-for-creating-a-checksum"
+    apiKey: "secret",
+    firestoreCollection: "somecollection",
+    minimumSubmitInterval: 60*60*24*7.5
   )
-}
-```
-
-### SHA256 using CommonCrypto
-
-Note that this implementation needs a bridging header that contains: `#import <CommonCrypto/CommonCrypto.h>`
-
-```swift
-func sha256(string: String) -> String {
-  let data = string.data(using: .utf8)!
-  var hash = [UInt8](repeating: 0,  count: Int(CC_SHA256_DIGEST_LENGTH))
-  data.withUnsafeBytes {
-    _ = CC_SHA256($0.baseAddress, CC_LONG(data.count), &hash)
-  }
-  return Data(hash).map { String(format: "%02hhx", $0) }.joined()
 }
 ```

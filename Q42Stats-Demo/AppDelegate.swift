@@ -33,12 +33,3 @@ extension Q42Stats.Configuration {
     minimumSubmitInterval: 60*60*24*7.5
   )
 }
-
-func sha256(string: String) -> String {
-  let data = string.data(using: .utf8)!
-  var hash = [UInt8](repeating: 0,  count: Int(CC_SHA256_DIGEST_LENGTH))
-  data.withUnsafeBytes {
-    _ = CC_SHA256($0.baseAddress, CC_LONG(data.count), &hash)
-  }
-  return Data(hash).map { String(format: "%02hhx", $0) }.joined()
-}
