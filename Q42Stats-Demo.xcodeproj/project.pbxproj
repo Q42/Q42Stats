@@ -14,7 +14,6 @@
 
 /* Begin PBXFileReference section */
 		D5AAC736247DAC44007824C2 /* Q42Stats.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Q42Stats.swift; sourceTree = "<group>"; };
-		D5DA100C24488FC000F5B9AC /* Q42Stats-Demo-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Q42Stats-Demo-Bridging-Header.h"; sourceTree = "<group>"; };
 		E250308B23F444210053A644 /* Q42Stats-Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Q42Stats-Demo.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E250308E23F444210053A644 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E250309A23F444230053A644 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = "../Q42Stats-Demo.xcodeproj/Info.plist"; sourceTree = "<group>"; };
@@ -56,7 +55,9 @@
 				E250308D23F444210053A644 /* Q42Stats-Demo */,
 				E250308C23F444210053A644 /* Products */,
 			);
+			indentWidth = 2;
 			sourceTree = "<group>";
+			tabWidth = 2;
 		};
 		E250308C23F444210053A644 /* Products */ = {
 			isa = PBXGroup;
@@ -71,7 +72,6 @@
 			children = (
 				E250308E23F444210053A644 /* AppDelegate.swift */,
 				E250309A23F444230053A644 /* Info.plist */,
-				D5DA100C24488FC000F5B9AC /* Q42Stats-Demo-Bridging-Header.h */,
 			);
 			path = "Q42Stats-Demo";
 			sourceTree = "<group>";
@@ -286,7 +286,6 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "nl.q42.Q42Stats-Demo";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "Q42Stats-Demo/Q42Stats-Demo-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -307,7 +306,6 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "nl.q42.Q42Stats-Demo";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "Q42Stats-Demo/Q42Stats-Demo-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

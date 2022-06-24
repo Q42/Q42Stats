@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name         = "Q42Stats"
-    s.version      = "1.0.1"
+    s.version      = "1.1"
     s.license      = "Commercial"
   
     s.summary      = "Collect stats."
