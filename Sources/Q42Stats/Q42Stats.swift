@@ -48,6 +48,7 @@ public class Q42Stats: NSObject {
   private static let statsVersion = "iOS 2022-04-15"
 
   private static let collectedStatsKey = "nl.q42.stats.collectedStatsKey"
+  private static let batchIdKey = "nl.q42.stats.batchIdKey"
   private static let timestampOfPreviousSubmitKey = "nl.q42.stats.timestampOfPreviousSubmitKey"
 
   public let options: StatsOptions
@@ -95,11 +96,17 @@ public class Q42Stats: NSObject {
         return
       }
 
+      // Retrieve previous batchId
+      let previousBatchId = UserDefaults.standard.string(forKey: batchIdKey)
+
       // Build request and submit
       var request = URLRequest(url: endpoint, cachePolicy: .useProtocolCachePolicy, timeoutInterval: 30)
       request.httpMethod = "POST"
       request.setValue("application/json", forHTTPHeaderField: "Content-Type")
       request.setValue(configuration.apiKey, forHTTPHeaderField: "X-Api-Key")
+      if let batchId = previousBatchId {
+        request.setValue(batchId, forHTTPHeaderField: "batchId")
+      }
       request.httpBody = payload
 
       let task = URLSession.shared.dataTask(with: request) { data, response, error in
@@ -111,6 +118,10 @@ public class Q42Stats: NSObject {
         // On succes we update the local data
         UserDefaults.standard.set(stats, forKey: collectedStatsKey)
         UserDefaults.standard.set(timestamp, forKey: timestampOfPreviousSubmitKey)
+
+        if let data = data, let response = try? JSONDecoder().decode(StatsResponse.self, from: data) {
+          UserDefaults.standard.set(response.batchId, forKey: batchIdKey)
+        }
       }
       task.resume()
     }
@@ -626,4 +637,8 @@ private struct StatsPayload: Encodable {
     self.currentMeasurement = current
     self.previousMeasurement = previous
   }
+}
+
+private struct StatsResponse: Decodable {
+  let batchId: String
 }

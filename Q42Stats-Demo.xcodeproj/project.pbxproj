@@ -56,7 +56,9 @@
 				E250308D23F444210053A644 /* Q42Stats-Demo */,
 				E250308C23F444210053A644 /* Products */,
 			);
+			indentWidth = 2;
 			sourceTree = "<group>";
+			tabWidth = 2;
 		};
 		E250308C23F444210053A644 /* Products */ = {
 			isa = PBXGroup;
