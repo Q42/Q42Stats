@@ -10,17 +10,12 @@ Pod::Spec.new do |s|
                      DESC
   
     s.authors           = { "Q42" => "info@q42.nl" }
-    s.homepage          = "https://github.com/Q42/Q42Stats.iOS"
+    s.homepage          = "https://github.com/Q42/Q42Stats"
 
-    s.ios.deployment_target = '10.0'
+    s.ios.deployment_target = '12.0'
   
-    s.source          = { :git => "https://github.com/Q42/Q42Stats.iOS.git", :tag => s.version }
-    s.requires_arc    = true
-    s.default_subspec = "Core"
-    s.swift_version   = "5.1"
-  
-    s.subspec "Core" do |ss|
-      ss.source_files  = "Sources/Q42Stats"
-    end
+    s.source          = { :git => "https://github.com/Q42/Q42Stats.git", :tag => s.version }
+    s.source_files    = "Sources/Q42Stats"
+    s.swift_version   = "5.5"
   
   end
