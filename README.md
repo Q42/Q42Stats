@@ -3,9 +3,9 @@ Q42Stats
 
 Collect stats for Q42 internal usage, shared accross multiple iOS projects.
 
-## Instalation
+## Installation
 
-1. Use SPM or CocoaPods to add  `Q42Stats` into your iOS project
+1. Use the Swift package manager to add  `Q42Stats` into your iOS project
 2. Implement your configuration and a SHA256 implementation (see reference implementations below)
 3. Include stats collection & submission in your AppDelegate/WindowSceneDelegate like so:
 
@@ -15,14 +15,6 @@ Q42Stats(options: .all)
 ```
 
 Note: Make sure you have the correct consent from the user before you call `.collect()`.
-
-### CocoaPods
-
-Add to your `Podfile` the following line:
-
-`pod 'Q42Stats', git: 'https://github.com/Q42/Q42Stats.git'`
-
-Also make sure you require iOS 11 or higher as the minimum target using: `platform :ios, '11.0'`
 
 ### Swift Package Manager
 
