@@ -114,10 +114,3 @@ Q42Stats does not collect personal data, the data collected can not be related t
 |-|-|-|
 | `stats_timestamp` | string | |
 | `stats_version` | string | |
-
-
-
-
-
-
-
