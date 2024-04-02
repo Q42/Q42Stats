@@ -526,8 +526,6 @@ extension UIDevice {
       "iPad12,1": "iPad (9th generation)",
       "iPad12,2": "iPad (9th generation)",
       "iPad13,1": "iPad Air (4th generation)",
-      "iPad13,10": "iPad Pro (12.9-inch) (5th generation)",
-      "iPad13,11": "iPad Pro (12.9-inch) (5th generation)",
       "iPad13,2": "iPad Air (4th generation)",
       "iPad13,4": "iPad Pro (11-inch) (3rd generation)",
       "iPad13,5": "iPad Pro (11-inch) (3rd generation)",
@@ -535,8 +533,18 @@ extension UIDevice {
       "iPad13,7": "iPad Pro (11-inch) (3rd generation)",
       "iPad13,8": "iPad Pro (12.9-inch) (5th generation)",
       "iPad13,9": "iPad Pro (12.9-inch) (5th generation)",
+      "iPad13,10": "iPad Pro (12.9-inch) (5th generation)",
+      "iPad13,11": "iPad Pro (12.9-inch) (5th generation)",
+      "iPad13,16" : "iPad Air 5th Gen (WiFi)",
+      "iPad13,17" : "iPad Air 5th Gen (WiFi+Cellular)",
+      "iPad13,18" : "iPad 10th Gen",
+      "iPad13,19" : "iPad 10th Gen",
       "iPad14,1": "iPad mini (6th generation)",
       "iPad14,2": "iPad mini (6th generation)",
+      "iPad14,3" : "iPad Pro 11 inch 4th Gen",
+      "iPad14,4" : "iPad Pro 11 inch 4th Gen",
+      "iPad14,5" : "iPad Pro 12.9 inch 6th Gen",
+      "iPad14,6" : "iPad Pro 12.9 inch 6th Gen",
 
       "iPhone1,1": "iPhone",
       "iPhone1,2": "iPhone 3G",
@@ -546,7 +554,6 @@ extension UIDevice {
       "iPhone4,1": "iPhone 4S",         //
       "iPhone5,1": "iPhone 5",          // (model A1428, AT&T/Canada)
       "iPhone5,2": "iPhone 5",          // (model A1429, everything else)
-
       "iPhone5,3": "iPhone 5c",         // (model A1456, A1532 | GSM)
       "iPhone5,4": "iPhone 5c",         // (model A1507, A1516, A1526 (China), A1529 | Global)
       "iPhone6,1": "iPhone 5s",         // (model A1433, A1533 | GSM)
@@ -582,6 +589,15 @@ extension UIDevice {
       "iPhone14,3": "iPhone 13 Pro Max", //
       "iPhone14,4": "iPhone 13 mini",    //
       "iPhone14,5": "iPhone 13",         //
+      "iPhone14,6" : "iPhone SE 3rd Gen",
+      "iPhone14,7" : "iPhone 14",
+      "iPhone14,8" : "iPhone 14 Plus",
+      "iPhone15,2" : "iPhone 14 Pro",
+      "iPhone15,3" : "iPhone 14 Pro Max",
+      "iPhone15,4" : "iPhone 15",
+      "iPhone15,5" : "iPhone 15 Plus",
+      "iPhone16,1" : "iPhone 15 Pro",
+      "iPhone16,2" : "iPhone 15 Pro Max",
     ]
 
     let id = modelIdentifier
