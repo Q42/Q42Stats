@@ -302,6 +302,7 @@ private extension UIUserInterfaceIdiom {
     case .tv: return "tv"
     case .unspecified: return "unspecified"
     case .mac: return "mac"
+    case .vision: return "vision"
     @unknown default: return "unknown"
     }
   }
