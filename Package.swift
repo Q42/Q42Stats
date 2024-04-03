@@ -10,6 +10,13 @@ let package = Package(
         .library(name: "Q42Stats", targets: ["Q42Stats"])
     ],
     targets: [
-        .target(name: "Q42Stats", dependencies: [])
+        .target(
+            name: "Q42Stats",
+            dependencies: [],
+            path: "Sources",
+            resources: [
+                .copy("PrivacyInfo.xcprivacy"),
+            ]
+        )
     ]
 )
