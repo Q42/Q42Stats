@@ -7,16 +7,18 @@ let package = Package(
         .iOS(.v12),
     ],
     products: [
-        .library(name: "Q42Stats", targets: ["Q42Stats"])
+        .library(name: "Q42Stats", targets: ["Q42Stats"]),
     ],
     targets: [
         .target(
             name: "Q42Stats",
-            dependencies: [],
-            path: "Sources",
             resources: [
                 .copy("PrivacyInfo.xcprivacy"),
             ]
-        )
+        ),
+        .testTarget(
+            name: "Q42StatsTests",
+            dependencies: ["Q42Stats"]
+        ),
     ]
 )
