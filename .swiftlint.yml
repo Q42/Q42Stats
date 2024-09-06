@@ -1,0 +1,7 @@
+disabled_rules:
+  - trailing_comma
+  - line_length
+  - unused_closure_parameter
+  - file_length
+  - function_body_length
+  - identifier_name
