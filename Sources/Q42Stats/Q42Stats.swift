@@ -545,7 +545,14 @@ extension UIDevice {
             "iPad14,4": "iPad Pro 11 inch 4th Gen",
             "iPad14,5": "iPad Pro 12.9 inch 6th Gen",
             "iPad14,6": "iPad Pro 12.9 inch 6th Gen",
-
+            "iPad14,8": "iPad Air 11-inch (M2)",
+            "iPad14,9": "iPad Air 11-inch (M2)",
+            "iPad14,10": "iPad Air 13-inch (M2)",
+            "iPad14,11": "iPad Air 13-inch (M2)",
+            "iPad16,3": "iPad Pro 11-inch (M4)",
+            "iPad16,4": "iPad Pro 11-inch (M4)",
+            "iPad16,5": "iPad Pro 13-inch (M4)",
+            "iPad16,6": "iPad Pro 13-inch (M4)",
             "iPhone1,1": "iPhone",
             "iPhone1,2": "iPhone 3G",
             "iPhone2,1": "iPhone 3GS",
@@ -598,6 +605,10 @@ extension UIDevice {
             "iPhone15,5": "iPhone 15 Plus",
             "iPhone16,1": "iPhone 15 Pro",
             "iPhone16,2": "iPhone 15 Pro Max",
+            "iPhone17,1": "iPhone 16 Pro",
+            "iPhone17,2": "iPhone 16 Pro Max",
+            "iPhone17,3": "iPhone 16",
+            "iPhone17,4": "iPhone 16 Plus",
         ]
 
         let id = modelIdentifier
