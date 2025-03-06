@@ -188,9 +188,13 @@ public class Q42Stats: NSObject {
 
         if options.contains(.preferences) {
             if #available(iOS 13.0, *) {
+              let overrideInterfaceStyle = Bundle.main.object(forInfoDictionaryKey: "UIUserInterfaceStyle") as? String
+              // Don't log UI style if the app is always in light mode or always in dark mode.
+              if overrideInterfaceStyle != "Dark" && overrideInterfaceStyle != "Light" {
                 let style = UITraitCollection.current.userInterfaceStyle
                 _log(key: "Preference_UI_style", value: style.description)
                 _log(key: "Preference_daytime", value: dayNight())
+              }
 
                 let category = UITraitCollection.current.preferredContentSizeCategory
                 _log(key: "Preference_preferred_content_size", value: category.description)
