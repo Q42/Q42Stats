@@ -124,6 +124,7 @@ public class Q42Stats: NSObject {
         }
     }
 
+    @MainActor
     private func _log(key: String, value: String) {
         collected[key] = value
     }
@@ -270,7 +271,10 @@ public class Q42Stats: NSObject {
 extension Q42Stats: WCSessionDelegate {
     @available(iOS 9.3, *)
     public func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {
-        self._log(key: "Watch_paired", value: session.isPaired.description)
+        let watchPairedValue = session.isPaired.description
+        DispatchQueue.main.async {
+            self._log(key: "Watch_paired", value: watchPairedValue)
+        }
     }
 
     public func sessionDidBecomeInactive(_ session: WCSession) {}
