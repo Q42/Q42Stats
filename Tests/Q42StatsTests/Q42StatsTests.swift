@@ -2,7 +2,7 @@ import XCTest
 @testable import Q42Stats
 
 final class Q42StatsTests: XCTestCase {
-    func testCollectAccessibilityStatistics() throws {
+    @MainActor func testCollectAccessibilityStatistics() throws {
         let stats = Q42Stats(options: [.accessibility])
         let expectation = expectation(description: "Stats collection")
         stats.collect(window: nil) { result in

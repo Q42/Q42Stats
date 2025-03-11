@@ -13,7 +13,7 @@ import WatchConnectivity
 /// Collect stats for Q42 internal usage, shared accross multiple iOS projects.
 ///
 public class Q42Stats: NSObject {
-    public struct Configuration {
+    public struct Configuration: Sendable {
         let apiKey: String
         let firestoreCollection: String
         let minimumSubmitInterval: TimeInterval
@@ -27,7 +27,7 @@ public class Q42Stats: NSObject {
         }
     }
 
-    public struct StatsOptions: OptionSet {
+    public struct StatsOptions: OptionSet, Sendable {
         public let rawValue: Int
         public init(rawValue: Int) { self.rawValue = rawValue }
 
@@ -44,7 +44,6 @@ public class Q42Stats: NSObject {
         ]
     }
 
-    private static var shared: Q42Stats?
     private static let statsVersion = "iOS 2022-04-15"
 
     private static let collectedStatsKey = "nl.q42.stats.collectedStatsKey"
@@ -58,8 +57,6 @@ public class Q42Stats: NSObject {
         self.options = options
 
         super.init()
-
-        Q42Stats.shared = self
     }
 
     private static func seedPreviousSubmitMomentIfNeeded(minimumSubmitInterval: TimeInterval) {
@@ -127,6 +124,7 @@ public class Q42Stats: NSObject {
         }
     }
 
+    @MainActor
     private func _log(key: String, value: String) {
         collected[key] = value
     }
@@ -134,7 +132,8 @@ public class Q42Stats: NSObject {
     /// Start collection of statistics.
     ///
     /// - Note: Must be called from the main queue
-    public func collect(window: UIWindow?, completion: @escaping ([String: String]) -> Void) {
+  @MainActor
+  public func collect(window: UIWindow?, completion: @escaping ([String: String]) -> Void) {
         collected = [:]
 
         _log(key: "Stats_version", value: Q42Stats.statsVersion)
@@ -272,8 +271,9 @@ public class Q42Stats: NSObject {
 extension Q42Stats: WCSessionDelegate {
     @available(iOS 9.3, *)
     public func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {
+        let watchPairedValue = session.isPaired.description
         DispatchQueue.main.async {
-            self._log(key: "Watch_paired", value: session.isPaired.description)
+            self._log(key: "Watch_paired", value: watchPairedValue)
         }
     }
 
@@ -405,6 +405,7 @@ private extension UILegibilityWeight {
 }
 
 private extension UIAccessibility {
+    @MainActor
     static func usesAnyAccessibilitySetting() -> Bool {
         var enabled = false
 
