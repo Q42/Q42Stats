@@ -12,7 +12,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    - name: Build
-      run: swift build -v
-    - name: Run tests
-      run: swift test -v
+    - name: Test
+      run: |
+        PLATFORM="iOS Simulator"
+        DEVICE=`xcrun xctrace list devices 2>&1 | grep -oE 'iPhone.*?[^\(]+' | head -1 | awk '{$1=$1;print}' | sed -e "s/ Simulator$//"`
+        xcodebuild -scheme Q42Stats -destination "platform=$PLATFORM,name=$DEVICE" build test
